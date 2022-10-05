@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import dev.toriyama.android.installedapps.databinding.ListApplicationBinding
+import java.text.SimpleDateFormat
 
 class AppListAdapter(
     context: Context,
@@ -26,6 +27,8 @@ class AppListAdapter(
             }
             holder.binding.textAppName.text = item.name
             holder.binding.textAppVersion.text = item.version
+            holder.binding.textAppPackagename.text = item.packageName
+            holder.binding.textAppLastupdatetime.text = SimpleDateFormat("yyyy/MM/dd HH:mm").format(item.lastUpdateTime)
         }
     }
 

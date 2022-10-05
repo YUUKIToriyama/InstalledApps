@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import dev.toriyama.android.installedapps.databinding.ActivityMainBinding
+import java.util.Date
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -34,8 +35,10 @@ class MainActivity : AppCompatActivity() {
         packages.forEach {
             appList.add(
                 AppInfo(
-                    it.packageName,
+                    it.applicationInfo.loadLabel(packageManager).toString(),
                     it.versionName,
+                    it.packageName,
+                    Date(it.lastUpdateTime),
                     it.applicationInfo.loadLogo(packageManager)
                 )
             )
