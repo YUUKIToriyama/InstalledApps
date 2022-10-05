@@ -2,23 +2,45 @@ package dev.toriyama.android.installedapps
 
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import dev.toriyama.android.installedapps.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var adapter: AppListAdapter
+
+    private var appList: MutableList<AppInfo> = mutableListOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        showPackages()
+        adapter = AppListAdapter(this, appList.toList())
+
+        binding.recyclerViewContainer.setHasFixedSize(true)
+        binding.recyclerViewContainer.layoutManager = LinearLayoutManager(this)
+        binding.recyclerViewContainer.adapter = adapter
+        updateAppInfomations()
     }
 
-    private fun showPackages() {
+    private fun updateAppInfomations() {
         val packageManager = applicationContext.packageManager
-        val packages: List<PackageInfo> = packageManager.getInstalledPackages(PackageManager.GET_META_DATA)
+        appList.clear()
+        val packages: List<PackageInfo> =
+            packageManager.getInstalledPackages(PackageManager.GET_META_DATA)
         packages.forEach {
-            val name = it.packageName
-            println(name)
+            appList.add(
+                AppInfo(
+                    it.packageName,
+                    it.versionName,
+                    it.applicationInfo.loadLogo(packageManager)
+                )
+            )
         }
+        adapter.appList = appList.toList()
+        adapter.notifyDataSetChanged()
     }
 }
