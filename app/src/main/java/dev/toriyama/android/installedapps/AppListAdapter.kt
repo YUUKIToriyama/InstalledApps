@@ -8,7 +8,7 @@ import dev.toriyama.android.installedapps.databinding.ListApplicationBinding
 
 class AppListAdapter(
     context: Context,
-    private val appList: List<AppInfo>
+    var appList: List<AppInfo>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
@@ -21,7 +21,9 @@ class AppListAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is AppListViewHolder) {
             val item = appList[position]
-            holder.binding.imageviewAppLogo.setImageDrawable(item.logo)
+            if (item.logo != null) {
+                holder.binding.imageviewAppLogo.setImageDrawable(item.logo)
+            }
             holder.binding.textAppName.text = item.name
             holder.binding.textAppVersion.text = item.version
         }
